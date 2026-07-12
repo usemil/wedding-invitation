@@ -62,4 +62,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setInterval(updateCountdown, 1000);
     updateCountdown(); // Run immediately so there's no 1-second delay
+    // --- 4. Scroll Reveal (Story Timeline) ---
+    // This watches the screen and triggers animations when elements appear
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show-scroll');
+            }
+        });
+    }, { threshold: 0.1 }); // Triggers when 10% of the element is visible
+
+    const hiddenElements = document.querySelectorAll('.hidden-scroll');
+    hiddenElements.forEach((el) => observer.observe(el));
+
+    // --- 5. Interactive Floating Hearts ---
+    // Listens for clicks anywhere on the screen
+    document.body.addEventListener('click', function(e) {
+        // Don't spawn a heart if they click the "Tap to Open" button
+        if(e.target.tagName === 'BUTTON') return;
+
+        const heart = document.createElement('div');
+        heart.classList.add('floating-heart');
+        heart.innerHTML = '❤️'; // Try changing this to 🌸 if you prefer!
+        
+        // Randomize the start position slightly left or right of the tap
+        const randomX = (Math.random() - 0.5) * 40; 
+        
+        heart.style.left = `${e.clientX + randomX}px`;
+        heart.style.top = `${e.clientY}px`;
+        
+        document.body.appendChild(heart);
+        
+        // Clean up: Remove the heart from the DOM after animation finishes
+        setTimeout(() => {
+            heart.remove();
+        }, 1500);
+    });
 });
