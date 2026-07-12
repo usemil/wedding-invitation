@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Open Envelope
     openBtn.addEventListener("click", () => {
-        // Start Music
         bgMusic.play().catch(e => console.log("Audio play prevented:", e));
         musicBtn.classList.remove("hidden");
 
@@ -47,21 +46,23 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 preludeScreen.style.opacity = "1";
                 
-                // Keep quote on screen for exactly 3 seconds
                 setTimeout(() => {
                     preludeScreen.style.opacity = "0";
                     
                     setTimeout(() => {
                         preludeScreen.classList.add("hidden");
                         mainContent.classList.remove("hidden");
-                        appContainer.style.overflow = "auto";
+                        
+                        // FIX: Only allow vertical scrolling, strictly lock horizontal!
+                        appContainer.style.overflowY = "auto";
+                        appContainer.style.overflowX = "hidden";
                         
                         setTimeout(() => {
                             mainContent.classList.add("fade-in-content");
                         }, 50);
 
                     }, 1500); 
-                }, 3000); // Changed to 3000ms (3 seconds)
+                }, 3000); 
                 
             }, 50);
         }, 1000); 
@@ -113,7 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.1 });
     document.querySelectorAll('.hidden-scroll').forEach((el) => observer.observe(el));
 
-    // 6. Particle System (Click)
     // 6. Particle System (Click & Slide Trail)
     const symbols = ['❤️', '🌸', '✨', '💖'];
 
@@ -137,29 +137,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // 6a. Spawn on Tap/Click
     document.body.addEventListener('click', (e) => {
         if(e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
         spawnParticles(e.clientX, e.clientY, Math.floor(Math.random() * 3) + 2);
     });
 
-    // 6b. Spawn a magical trail when sliding finger (Touch Devices)
     let lastSpawnTime = 0;
     document.body.addEventListener('touchmove', (e) => {
         const now = Date.now();
-        // Throttle: only spawn 1 particle every 100 milliseconds during a slide
         if (now - lastSpawnTime > 100) {
-            const touch = e.touches[0]; // Get the first finger's position
+            const touch = e.touches[0]; 
             spawnParticles(touch.clientX, touch.clientY, 1);
             lastSpawnTime = now;
         }
-    }, { passive: true }); // passive: true ensures the page still scrolls smoothly
+    }, { passive: true }); 
 
-    // 6c. Spawn a magical trail when dragging mouse (Desktop/Laptops)
     document.body.addEventListener('mousemove', (e) => {
-        // Only spawn if they are holding click while moving (dragging)
         if (e.buttons !== 1) return; 
-        
         const now = Date.now();
         if (now - lastSpawnTime > 100) {
             spawnParticles(e.clientX, e.clientY, 1);
@@ -167,19 +161,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 7. Dense Sakura Spawning (FIXED FOR MOBILE VIEW)
+    // 7. Dense Sakura Spawning 
     function createSakura() {
         const petal = document.createElement('div');
         petal.classList.add('sakura-petal');
         petal.innerHTML = '🌸';
         
-        // Fix: Calculate the actual width and height of the phone container
         const containerWidth = appContainer.clientWidth;
         
-        // Spawn randomly within the exact pixel width of the app container
-        petal.style.left = (Math.random() * containerWidth) + 'px';
+        // FIX: Subtract 40px so petals never spawn perfectly on the right edge
+        petal.style.left = (Math.random() * (containerWidth - 40)) + 'px';
         
-        // Spawn randomly within the height of the entire scrolling document
         const containerHeight = Math.max(appContainer.scrollHeight, window.innerHeight);
         petal.style.top = (Math.random() * containerHeight) + 'px';
         
@@ -195,10 +187,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }, duration * 1000);
     }
     
-    // Spawn petals frequently
     setInterval(() => {
         createSakura();
-        createSakura(); // Two at a time for higher density
+        createSakura(); 
     }, 300);
 
     // 8. Venue & Fake RSVP Logic
