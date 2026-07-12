@@ -9,8 +9,25 @@
 </head>
 <body>
     <div id="app-container">
-        <h1 id="names-display">Loading...</h1>
-        <p>Our magical invitation is on the way.</p>
+        
+        <div id="splash-screen">
+            <div class="flower-bloom">🌸</div>
+            <p>Loading...</p>
+        </div>
+
+        <div id="envelope-screen" class="hidden">
+            <div class="envelope-card">
+                <div class="envelope-icon">✉️</div>
+                <h2>You are invited</h2>
+                <button id="open-btn">Tap to Open</button>
+            </div>
+        </div>
+
+        <div id="main-content" class="hidden">
+            <h1 id="names-display"></h1>
+            <p class="subtitle">Join us in celebrating our wedding</p>
+            </div>
+
     </div>
 
     <script src="config.js"></script>

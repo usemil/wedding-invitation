@@ -1,4 +1,4 @@
-/* Reset and base styles */
+/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -6,32 +6,139 @@
 }
 
 body {
-    background-color: #f5f5f5; /* Light gray background for desktop */
+    background-color: #f5f5f5; 
     display: flex;
-    justify-content: center; /* Centers the phone frame on desktop */
+    justify-content: center; 
     font-family: 'Poppins', sans-serif;
     color: #333;
 }
 
-/* The Mobile App Frame */
 #app-container {
     width: 100%;
-    max-width: 430px; /* iPhone Pro Max width */
+    max-width: 430px; 
     min-height: 100vh;
-    background-color: #fffdf7; /* Elegant Cream background */
-    box-shadow: 0 0 20px rgba(0,0,0,0.1); /* Adds depth when viewed on a laptop */
+    background-color: #fffdf7; /* Cream background */
+    box-shadow: 0 0 20px rgba(0,0,0,0.1); 
     position: relative;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- Splash Screen --- */
+#splash-screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: #fffdf7;
+    z-index: 50;
+    transition: opacity 0.8s ease-out;
+}
+
+.flower-bloom {
+    font-size: 4rem;
+    animation: bloom 2s ease-in-out infinite alternate;
+    margin-bottom: 10px;
+}
+
+@keyframes bloom {
+    0% { transform: scale(0.8); opacity: 0.6; }
+    100% { transform: scale(1.2); opacity: 1; }
+}
+
+/* --- Envelope Screen --- */
+#envelope-screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fffdf7;
+    z-index: 40;
+    transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1), opacity 1s ease-in-out;
+}
+
+.envelope-card {
+    background-color: #ffffff;
+    width: 85%;
+    padding: 50px 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15); /* Soft gold shadow */
+    border: 1px solid rgba(212, 175, 55, 0.3);
     text-align: center;
+}
+
+.envelope-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.envelope-card h2 {
+    font-family: 'Great Vibes', cursive;
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+}
+
+#open-btn {
+    background-color: #d4af37; /* Gold accent */
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    transition: transform 0.2s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#open-btn:active {
+    transform: scale(0.95);
+}
+
+/* Animation class for opening the envelope */
+.slide-up-away {
+    transform: translateY(-100vh);
+    opacity: 0;
+}
+
+/* --- Main Content --- */
+#main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    opacity: 0;
+    transition: opacity 1.5s ease-in;
+}
+
+.fade-in-content {
+    opacity: 1 !important;
 }
 
 h1 {
     font-family: 'Great Vibes', cursive;
-    font-size: 3.5rem;
-    color: #d4af37; /* Gold accent */
+    font-size: 3.2rem;
+    color: #d4af37;
+    text-align: center;
+    line-height: 1.2;
     margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
