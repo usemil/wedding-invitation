@@ -137,4 +137,73 @@ document.addEventListener("DOMContentLoaded", () => {
             lastScrollTime = now;
         }
     });
+    // --- 6. Music Player Logic ---
+    const musicBtn = document.getElementById("music-btn");
+    const bgMusic = document.getElementById("bg-music");
+    
+    // Set music source from config
+    bgMusic.src = weddingConfig.musicSrc;
+
+    // Show music button only after envelope opens
+    openBtn.addEventListener("click", () => {
+        setTimeout(() => {
+            musicBtn.classList.remove("hidden");
+        }, 1500);
+    });
+
+    let isPlaying = false;
+    musicBtn.addEventListener("click", () => {
+        if (isPlaying) {
+            bgMusic.pause();
+            musicBtn.classList.remove("playing");
+        } else {
+            bgMusic.play();
+            musicBtn.classList.add("playing");
+        }
+        isPlaying = !isPlaying;
+        
+        // Spawn particles when clicking music
+        spawnParticles(window.innerWidth - 40, 40, 3);
+    });
+
+    // --- 7. Venue & Map Link ---
+    const mapBtn = document.getElementById("map-btn");
+    mapBtn.href = weddingConfig.mapLink;
+    document.getElementById("venue-text-large").textContent = weddingConfig.venue;
+
+    // --- 8. Fake Wishes Wall / RSVP Logic ---
+    const sendWishBtn = document.getElementById("send-wish-btn");
+    const wishesCard = document.getElementById("wishes-card");
+    const thankYouMsg = document.getElementById("thank-you-msg");
+    const guestNameInput = document.getElementById("guest-name");
+
+    sendWishBtn.addEventListener("click", () => {
+        if (guestNameInput.value.trim() === "") {
+            guestNameInput.style.borderColor = "red";
+            setTimeout(() => guestNameInput.style.borderColor = "rgba(212, 175, 55, 0.3)", 2000);
+            return;
+        }
+
+        // Change button text briefly
+        sendWishBtn.innerHTML = "Sending...";
+        
+        setTimeout(() => {
+            // Hide form, show thank you
+            wishesCard.classList.add("hidden");
+            thankYouMsg.classList.remove("hidden");
+            
+            // Massive particle explosion from the center of the screen!
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            
+            // Spawn a ton of hearts
+            let count = 0;
+            const burst = setInterval(() => {
+                spawnParticles(centerX, centerY, 5);
+                count++;
+                if(count > 10) clearInterval(burst); // Stop after a few bursts
+            }, 100);
+
+        }, 800);
+    });
 });

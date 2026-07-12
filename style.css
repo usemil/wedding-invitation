@@ -141,3 +141,61 @@ h1 { font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: #d4af37; tex
     20% { opacity: 1; }
     100% { transform: translateY(-150px) scale(1.2) rotate(20deg); opacity: 0; }
 }
+/* --- New Sections: Glass Cards & Buttons --- */
+.glass-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    width: 100%; padding: 30px 20px; border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    text-align: center; margin-bottom: 30px;
+}
+.glass-card h3 { font-family: 'Great Vibes', cursive; font-size: 2.2rem; color: #d4af37; margin-bottom: 15px; }
+
+.primary-btn {
+    display: inline-block; background: linear-gradient(135deg, #d4af37, #b8860b);
+    color: #fff; border: none; padding: 12px 25px; font-family: 'Poppins', sans-serif;
+    font-size: 1rem; font-weight: 600; border-radius: 30px; cursor: pointer;
+    text-decoration: none; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    transition: transform 0.2s, box-shadow 0.2s; margin-top: 15px; width: 100%;
+}
+.primary-btn:active { transform: scale(0.95); }
+
+/* --- Dress Code --- */
+.dress-code-section { width: 100%; text-align: center; margin-bottom: 40px; }
+.dress-code-section h3 { font-family: 'Great Vibes', cursive; font-size: 2.5rem; color: #d4af37; margin-bottom: 20px; }
+.dress-grid { display: flex; justify-content: space-around; gap: 15px; }
+.dress-item {
+    background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px);
+    flex: 1; padding: 20px 10px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.9);
+}
+.dress-item .icon { font-size: 2rem; display: block; margin-bottom: 10px; }
+.dress-item h4 { color: #333; font-weight: 600; font-size: 1.1rem; }
+.dress-item p { color: #777; font-size: 0.9rem; }
+
+/* --- Wishes Wall Inputs --- */
+.input-field {
+    width: 100%; padding: 12px 15px; margin-bottom: 15px;
+    border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.3);
+    background: rgba(255, 255, 255, 0.8); font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem; outline: none; transition: border 0.3s;
+}
+.input-field:focus { border-color: #d4af37; }
+#thank-you-msg { text-align: center; padding: 30px 10px; }
+#thank-you-msg h3 { font-family: 'Great Vibes', cursive; font-size: 2.8rem; color: #d4af37; }
+
+/* --- Footer --- */
+.footer { text-align: center; padding: 40px 20px 80px; opacity: 0.8; }
+.footer p { font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+.footer-names { font-family: 'Great Vibes', cursive; font-size: 2rem; color: #d4af37; }
+
+/* --- Music Button --- */
+#music-btn {
+    position: fixed; top: 20px; right: 20px; z-index: 100;
+    width: 45px; height: 45px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(5px);
+    border: 1px solid #d4af37; font-size: 1.2rem; cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;
+}
+.playing { animation: spin 4s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
