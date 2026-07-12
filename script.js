@@ -114,6 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.hidden-scroll').forEach((el) => observer.observe(el));
 
     // 6. Particle System (Click)
+    // 6. Particle System (Click & Slide Trail)
     const symbols = ['❤️', '🌸', '✨', '💖'];
 
     function spawnParticles(x, y, amount) {
@@ -136,9 +137,34 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // 6a. Spawn on Tap/Click
     document.body.addEventListener('click', (e) => {
         if(e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
         spawnParticles(e.clientX, e.clientY, Math.floor(Math.random() * 3) + 2);
+    });
+
+    // 6b. Spawn a magical trail when sliding finger (Touch Devices)
+    let lastSpawnTime = 0;
+    document.body.addEventListener('touchmove', (e) => {
+        const now = Date.now();
+        // Throttle: only spawn 1 particle every 100 milliseconds during a slide
+        if (now - lastSpawnTime > 100) {
+            const touch = e.touches[0]; // Get the first finger's position
+            spawnParticles(touch.clientX, touch.clientY, 1);
+            lastSpawnTime = now;
+        }
+    }, { passive: true }); // passive: true ensures the page still scrolls smoothly
+
+    // 6c. Spawn a magical trail when dragging mouse (Desktop/Laptops)
+    document.body.addEventListener('mousemove', (e) => {
+        // Only spawn if they are holding click while moving (dragging)
+        if (e.buttons !== 1) return; 
+        
+        const now = Date.now();
+        if (now - lastSpawnTime > 100) {
+            spawnParticles(e.clientX, e.clientY, 1);
+            lastSpawnTime = now;
+        }
     });
 
     // 7. Dense Sakura Spawning (FIXED FOR MOBILE VIEW)
