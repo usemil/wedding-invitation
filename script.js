@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     dateDisplay.textContent = weddingDateObj.toLocaleDateString('en-US', dateOptions);
 
-    // 2. Advanced Flow Transitions
+    // 2. Flow Transitions & Music
     const appContainer = document.getElementById("app-container");
     const splashScreen = document.getElementById("splash-screen");
     const envelopeScreen = document.getElementById("envelope-screen");
@@ -19,11 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const mainContent = document.getElementById("main-content");
     const openBtn = document.getElementById("open-btn");
     const bgMusic = document.getElementById("bg-music");
+    const musicBtn = document.getElementById("music-btn");
 
-    // Pre-load music
     bgMusic.src = weddingConfig.musicSrc;
 
-    // Hide Splash after 2 seconds
+    // Splash Screen fade out
     setTimeout(() => {
         splashScreen.style.opacity = "0";
         setTimeout(() => {
@@ -32,10 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 800); 
     }, 2000); 
 
-    // Handle Envelope Open & Play Music
+    // Open Envelope
     openBtn.addEventListener("click", () => {
-        // Play music directly! The browser allows this because it's tied to a click event.
-        bgMusic.play().catch(e => console.log("Audio play prevented by browser:", e));
+        // Start Music
+        bgMusic.play().catch(e => console.log("Audio play prevented:", e));
+        musicBtn.classList.remove("hidden");
 
         envelopeScreen.classList.add("slide-up-away");
         
@@ -43,34 +44,43 @@ document.addEventListener("DOMContentLoaded", () => {
             envelopeScreen.classList.add("hidden");
             preludeScreen.classList.remove("hidden");
             
-            // Fade in Prelude
             setTimeout(() => {
                 preludeScreen.style.opacity = "1";
                 
-                // Keep prelude on screen for 4 seconds, then fade out
+                // Keep quote on screen for exactly 3 seconds
                 setTimeout(() => {
                     preludeScreen.style.opacity = "0";
                     
                     setTimeout(() => {
                         preludeScreen.classList.add("hidden");
                         mainContent.classList.remove("hidden");
-                        
-                        // Allow app-container to scroll now
                         appContainer.style.overflow = "auto";
                         
-                        // Finally, fade in main content
                         setTimeout(() => {
                             mainContent.classList.add("fade-in-content");
                         }, 50);
 
                     }, 1500); 
-                }, 4000); 
+                }, 3000); // Changed to 3000ms (3 seconds)
                 
             }, 50);
         }, 1000); 
     });
 
-    // 3. Live Countdown Timer
+    // 3. Music Pause/Play Toggle
+    let isPlaying = true;
+    musicBtn.addEventListener("click", () => {
+        if (isPlaying) {
+            bgMusic.pause();
+            musicBtn.innerHTML = "🔇";
+        } else {
+            bgMusic.play();
+            musicBtn.innerHTML = "🎵";
+        }
+        isPlaying = !isPlaying;
+    });
+
+    // 4. Live Countdown Timer
     function updateCountdown() {
         const now = new Date().getTime();
         const difference = weddingDateObj.getTime() - now;
@@ -93,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(updateCountdown, 1000);
     updateCountdown(); 
 
-    // 4. Scroll Reveal
+    // 5. Scroll Reveal
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -103,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.1 });
     document.querySelectorAll('.hidden-scroll').forEach((el) => observer.observe(el));
 
-    // 5. Enhanced Particle System (Click & Scroll)
+    // 6. Particle System (Click)
     const symbols = ['❤️', '🌸', '✨', '💖'];
 
     function spawnParticles(x, y, amount) {
@@ -127,49 +137,45 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.body.addEventListener('click', (e) => {
-        if(e.target.tagName === 'BUTTON') return;
+        if(e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
         spawnParticles(e.clientX, e.clientY, Math.floor(Math.random() * 3) + 2);
     });
 
-    let lastScrollTime = 0;
-    window.addEventListener('scroll', () => {
-        const now = Date.now();
-        if (now - lastScrollTime > 200) { 
-            const randomX = Math.random() * window.innerWidth;
-            const y = window.innerHeight - 20; 
-            spawnParticles(randomX, y, 1);
-            lastScrollTime = now;
-        }
-    });
-
-    // 6. Popping Sakura Petals (Random X and Y)
+    // 7. Dense Sakura Spawning (FIXED FOR MOBILE VIEW)
     function createSakura() {
         const petal = document.createElement('div');
         petal.classList.add('sakura-petal');
         petal.innerHTML = '🌸';
         
-        // Randomly place anywhere on the screen (both X and Y axis)
-        petal.style.left = Math.random() * 100 + 'vw';
-        petal.style.top = Math.random() * 100 + 'vh';
+        // Fix: Calculate the actual width and height of the phone container
+        const containerWidth = appContainer.clientWidth;
         
-        // Randomize size slightly
-        petal.style.fontSize = Math.random() * 0.8 + 0.8 + 'rem';
+        // Spawn randomly within the exact pixel width of the app container
+        petal.style.left = (Math.random() * containerWidth) + 'px';
         
-        // Randomize animation duration between 3 and 5 seconds
+        // Spawn randomly within the height of the entire scrolling document
+        const containerHeight = Math.max(appContainer.scrollHeight, window.innerHeight);
+        petal.style.top = (Math.random() * containerHeight) + 'px';
+        
+        petal.style.fontSize = Math.random() * 0.8 + 1 + 'rem';
+        
         const duration = Math.random() * 2 + 3;
         petal.style.animationDuration = duration + 's'; 
         
-        document.getElementById('app-container').appendChild(petal);
+        appContainer.appendChild(petal);
         
-        // Remove after animation completes
         setTimeout(() => {
             petal.remove();
         }, duration * 1000);
     }
-    // Spawn a new petal popping up every 800ms
-    setInterval(createSakura, 800);
+    
+    // Spawn petals frequently
+    setInterval(() => {
+        createSakura();
+        createSakura(); // Two at a time for higher density
+    }, 300);
 
-    // 7. Venue & Fake RSVP Logic
+    // 8. Venue & Fake RSVP Logic
     const mapBtn = document.getElementById("map-btn");
     mapBtn.href = weddingConfig.mapLink;
     document.getElementById("venue-text-large").textContent = weddingConfig.venue;
@@ -182,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sendWishBtn.addEventListener("click", () => {
         if (guestNameInput.value.trim() === "") {
             guestNameInput.style.borderColor = "red";
-            setTimeout(() => guestNameInput.style.borderColor = "rgba(212, 175, 55, 0.3)", 2000);
+            setTimeout(() => guestNameInput.style.borderColor = "rgba(181, 75, 110, 0.4)", 2000);
             return;
         }
 
@@ -197,9 +203,9 @@ document.addEventListener("DOMContentLoaded", () => {
             
             let count = 0;
             const burst = setInterval(() => {
-                spawnParticles(centerX, centerY, 5);
+                spawnParticles(centerX, centerY, 6);
                 count++;
-                if(count > 10) clearInterval(burst); 
+                if(count > 12) clearInterval(burst); 
             }, 100);
 
         }, 800);

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Wedding Invitation</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="app-container">
@@ -25,19 +25,22 @@
             </div>
         </div>
 
-        <!-- Stage 2.5: The Prelude (The Dua) -->
+        <!-- Stage 2.5: The Prelude -->
         <div id="prelude-screen" class="hidden">
-            <h2 class="prelude-text" style="font-size: 2.2rem;">
-                May Allah bless you both,<br>
-                shower His blessings upon you,<br>
-                and join you together in goodness.
+            <h2 class="prelude-text">
+                Two souls, one heart.<br>
+                May this beautiful journey<br>
+                be filled with endless love.
             </h2>
         </div>
 
         <!-- Stage 3: Main Invitation Content -->
         <div id="main-content" class="hidden">
+            
+            <p class="subtitle">TOGETHER WITH THEIR FAMILIES</p>
             <h1 id="names-display"></h1>
-            <p class="subtitle">Join us in celebrating our wedding</p>
+            
+            <div class="divider">✧ 🌸 ✧</div>
 
             <div class="wedding-details">
                 <div class="detail-item">
@@ -49,6 +52,8 @@
                     <p id="venue-display">Loading Venue...</p>
                 </div>
             </div>
+
+            <div class="divider">✧ 🌸 ✧</div>
 
             <div class="countdown-container">
                 <h3>Wedding Begins In</h3>
@@ -90,8 +95,8 @@
                 <div class="glass-card" id="wishes-card">
                     <h3>Send Your Wishes</h3>
                     <input type="text" id="guest-name" placeholder="Your Name" class="input-field">
-                    <textarea id="guest-wish" placeholder="Write a beautiful message for the couple..." class="input-field" rows="3"></textarea>
-                    <button id="send-wish-btn" class="primary-btn">Send ❤️</button>
+                    <textarea id="guest-wish" placeholder="Write a beautiful message..." class="input-field" rows="3"></textarea>
+                    <button id="send-wish-btn" class="primary-btn">Send 🌸</button>
                 </div>
                 <div id="thank-you-msg" class="hidden">
                     <h3>Thank You! ✨</h3>
@@ -101,12 +106,13 @@
 
             <!-- Footer -->
             <footer class="footer">
-                <p>We can't wait to celebrate with you ❤️</p>
+                <p>We can't wait to celebrate with you</p>
                 <h2 class="footer-names">Bint-e-Mubashar & M. Mubeen</h2>
             </footer>
         </div>
         
-        <!-- Hidden audio player for automatic background music -->
+        <!-- Music Button -->
+        <button id="music-btn" class="hidden">🎵</button>
         <audio id="bg-music" loop preload="auto"></audio>
     </div>
 
