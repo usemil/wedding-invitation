@@ -11,13 +11,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     dateDisplay.textContent = weddingDateObj.toLocaleDateString('en-US', dateOptions);
 
-    // 2. Advanced Flow Transitions (Smoothed out to prevent glitches)
+    // 2. Advanced Flow Transitions
     const appContainer = document.getElementById("app-container");
     const splashScreen = document.getElementById("splash-screen");
     const envelopeScreen = document.getElementById("envelope-screen");
     const preludeScreen = document.getElementById("prelude-screen");
     const mainContent = document.getElementById("main-content");
     const openBtn = document.getElementById("open-btn");
+    const bgMusic = document.getElementById("bg-music");
+
+    // Pre-load music
+    bgMusic.src = weddingConfig.musicSrc;
 
     // Hide Splash after 2 seconds
     setTimeout(() => {
@@ -28,8 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 800); 
     }, 2000); 
 
-    // Handle Envelope Open
+    // Handle Envelope Open & Play Music
     openBtn.addEventListener("click", () => {
+        // Play music directly! The browser allows this because it's tied to a click event.
+        bgMusic.play().catch(e => console.log("Audio play prevented by browser:", e));
+
         envelopeScreen.classList.add("slide-up-away");
         
         setTimeout(() => {
@@ -40,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 preludeScreen.style.opacity = "1";
                 
-                // Keep prelude on screen for 3.5 seconds, then fade out
+                // Keep prelude on screen for 4 seconds, then fade out
                 setTimeout(() => {
                     preludeScreen.style.opacity = "0";
                     
@@ -56,8 +63,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             mainContent.classList.add("fade-in-content");
                         }, 50);
 
-                    }, 1500); // Wait for prelude to fade out
-                }, 3500); 
+                    }, 1500); 
+                }, 4000); 
                 
             }, 50);
         }, 1000); 
@@ -135,56 +142,34 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // 6. Continuous Background Sakura Petals
+    // 6. Popping Sakura Petals (Random X and Y)
     function createSakura() {
         const petal = document.createElement('div');
         petal.classList.add('sakura-petal');
         petal.innerHTML = '🌸';
         
-        // Random starting horizontal position
+        // Randomly place anywhere on the screen (both X and Y axis)
         petal.style.left = Math.random() * 100 + 'vw';
+        petal.style.top = Math.random() * 100 + 'vh';
         
-        // Random fall speed (between 4s and 8s)
-        petal.style.animationDuration = Math.random() * 4 + 4 + 's'; 
+        // Randomize size slightly
+        petal.style.fontSize = Math.random() * 0.8 + 0.8 + 'rem';
         
-        // Random horizontal drift during the fall
-        const drift = (Math.random() - 0.5) * 100;
-        petal.style.setProperty('--drift', `${drift}px`);
+        // Randomize animation duration between 3 and 5 seconds
+        const duration = Math.random() * 2 + 3;
+        petal.style.animationDuration = duration + 's'; 
         
         document.getElementById('app-container').appendChild(petal);
         
+        // Remove after animation completes
         setTimeout(() => {
             petal.remove();
-        }, 8000);
+        }, duration * 1000);
     }
-    // Spawn a new petal every 600ms
-    setInterval(createSakura, 600);
+    // Spawn a new petal popping up every 800ms
+    setInterval(createSakura, 800);
 
-    // 7. Music Player Logic
-    const musicBtn = document.getElementById("music-btn");
-    const bgMusic = document.getElementById("bg-music");
-    bgMusic.src = weddingConfig.musicSrc;
-
-    openBtn.addEventListener("click", () => {
-        setTimeout(() => {
-            musicBtn.classList.remove("hidden");
-        }, 1500);
-    });
-
-    let isPlaying = false;
-    musicBtn.addEventListener("click", () => {
-        if (isPlaying) {
-            bgMusic.pause();
-            musicBtn.classList.remove("playing");
-        } else {
-            bgMusic.play();
-            musicBtn.classList.add("playing");
-        }
-        isPlaying = !isPlaying;
-        spawnParticles(window.innerWidth - 40, 40, 3);
-    });
-
-    // 8. Venue & Fake RSVP Logic
+    // 7. Venue & Fake RSVP Logic
     const mapBtn = document.getElementById("map-btn");
     mapBtn.href = weddingConfig.mapLink;
     document.getElementById("venue-text-large").textContent = weddingConfig.venue;

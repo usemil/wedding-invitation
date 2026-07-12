@@ -10,11 +10,13 @@
 <body>
     <div id="app-container">
         
+        <!-- Stage 1: Splash Screen -->
         <div id="splash-screen">
             <div class="flower-bloom">🌸</div>
             <p>Loading...</p>
         </div>
 
+        <!-- Stage 2: Locked Envelope -->
         <div id="envelope-screen" class="hidden">
             <div class="envelope-card">
                 <div class="envelope-icon">✉️</div>
@@ -23,10 +25,16 @@
             </div>
         </div>
 
+        <!-- Stage 2.5: The Prelude (The Dua) -->
         <div id="prelude-screen" class="hidden">
-            <h2 class="prelude-text">Every love story is beautiful,<br>but ours is our favorite...</h2>
+            <h2 class="prelude-text" style="font-size: 2.2rem;">
+                May Allah bless you both,<br>
+                shower His blessings upon you,<br>
+                and join you together in goodness.
+            </h2>
         </div>
 
+        <!-- Stage 3: Main Invitation Content -->
         <div id="main-content" class="hidden">
             <h1 id="names-display"></h1>
             <p class="subtitle">Join us in celebrating our wedding</p>
@@ -68,6 +76,7 @@
                 </div>
             </div>
 
+            <!-- Location / Map -->
             <div class="location-section hidden-scroll">
                 <div class="glass-card">
                     <h3>Venue</h3>
@@ -76,6 +85,7 @@
                 </div>
             </div>
 
+            <!-- Wishes Wall / Fake RSVP -->
             <div class="wishes-section hidden-scroll">
                 <div class="glass-card" id="wishes-card">
                     <h3>Send Your Wishes</h3>
@@ -89,13 +99,14 @@
                 </div>
             </div>
 
+            <!-- Footer -->
             <footer class="footer">
                 <p>We can't wait to celebrate with you ❤️</p>
                 <h2 class="footer-names">Bint-e-Mubashar & M. Mubeen</h2>
             </footer>
         </div>
-
-        <button id="music-btn" class="hidden">🎵</button>
+        
+        <!-- Hidden audio player for automatic background music -->
         <audio id="bg-music" loop preload="auto"></audio>
     </div>
 
