@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     dateDisplay.textContent = weddingDateObj.toLocaleDateString('en-US', dateOptions);
 
-    // 2. Advanced Flow Transitions (Splash -> Envelope -> Prelude -> Main)
+    // 2. Advanced Flow Transitions (Smoothed out to prevent glitches)
+    const appContainer = document.getElementById("app-container");
     const splashScreen = document.getElementById("splash-screen");
     const envelopeScreen = document.getElementById("envelope-screen");
     const preludeScreen = document.getElementById("prelude-screen");
@@ -47,16 +48,19 @@ document.addEventListener("DOMContentLoaded", () => {
                         preludeScreen.classList.add("hidden");
                         mainContent.classList.remove("hidden");
                         
+                        // Allow app-container to scroll now
+                        appContainer.style.overflow = "auto";
+                        
                         // Finally, fade in main content
                         setTimeout(() => {
                             mainContent.classList.add("fade-in-content");
                         }, 50);
 
                     }, 1500); // Wait for prelude to fade out
-                }, 3500); // How long the quote stays on screen
+                }, 3500); 
                 
             }, 50);
-        }, 1000); // Wait for envelope to slide away
+        }, 1000); 
     });
 
     // 3. Live Countdown Timer
@@ -92,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.1 });
     document.querySelectorAll('.hidden-scroll').forEach((el) => observer.observe(el));
 
-    // 5. Enhanced Particle System (Multiple symbols, Click & Scroll)
+    // 5. Enhanced Particle System (Click & Scroll)
     const symbols = ['❤️', '🌸', '✨', '💖'];
 
     function spawnParticles(x, y, amount) {
@@ -101,14 +105,12 @@ document.addEventListener("DOMContentLoaded", () => {
             particle.classList.add('floating-particle');
             particle.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
             
-            // Randomize position spread
             const randomX = (Math.random() - 0.5) * 80; 
             const randomY = (Math.random() - 0.5) * 40;
             
             particle.style.left = `${x + randomX}px`;
             particle.style.top = `${y + randomY}px`;
             
-            // Randomize size and animation duration
             particle.style.fontSize = `${Math.random() * 1 + 1}rem`;
             particle.style.animationDuration = `${Math.random() * 1 + 1.5}s`;
             
@@ -117,34 +119,52 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Spawn on Tap
     document.body.addEventListener('click', (e) => {
         if(e.target.tagName === 'BUTTON') return;
-        // Spawn 2 to 4 particles per tap
         spawnParticles(e.clientX, e.clientY, Math.floor(Math.random() * 3) + 2);
     });
 
-    // Spawn on Scroll (throttled so it doesn't overwhelm the browser)
     let lastScrollTime = 0;
     window.addEventListener('scroll', () => {
         const now = Date.now();
-        if (now - lastScrollTime > 200) { // Only spawn every 200ms of scrolling
-            // Spawn near the bottom of the visible screen
+        if (now - lastScrollTime > 200) { 
             const randomX = Math.random() * window.innerWidth;
             const y = window.innerHeight - 20; 
-            
             spawnParticles(randomX, y, 1);
             lastScrollTime = now;
         }
     });
-    // --- 6. Music Player Logic ---
+
+    // 6. Continuous Background Sakura Petals
+    function createSakura() {
+        const petal = document.createElement('div');
+        petal.classList.add('sakura-petal');
+        petal.innerHTML = '🌸';
+        
+        // Random starting horizontal position
+        petal.style.left = Math.random() * 100 + 'vw';
+        
+        // Random fall speed (between 4s and 8s)
+        petal.style.animationDuration = Math.random() * 4 + 4 + 's'; 
+        
+        // Random horizontal drift during the fall
+        const drift = (Math.random() - 0.5) * 100;
+        petal.style.setProperty('--drift', `${drift}px`);
+        
+        document.getElementById('app-container').appendChild(petal);
+        
+        setTimeout(() => {
+            petal.remove();
+        }, 8000);
+    }
+    // Spawn a new petal every 600ms
+    setInterval(createSakura, 600);
+
+    // 7. Music Player Logic
     const musicBtn = document.getElementById("music-btn");
     const bgMusic = document.getElementById("bg-music");
-    
-    // Set music source from config
     bgMusic.src = weddingConfig.musicSrc;
 
-    // Show music button only after envelope opens
     openBtn.addEventListener("click", () => {
         setTimeout(() => {
             musicBtn.classList.remove("hidden");
@@ -161,17 +181,14 @@ document.addEventListener("DOMContentLoaded", () => {
             musicBtn.classList.add("playing");
         }
         isPlaying = !isPlaying;
-        
-        // Spawn particles when clicking music
         spawnParticles(window.innerWidth - 40, 40, 3);
     });
 
-    // --- 7. Venue & Map Link ---
+    // 8. Venue & Fake RSVP Logic
     const mapBtn = document.getElementById("map-btn");
     mapBtn.href = weddingConfig.mapLink;
     document.getElementById("venue-text-large").textContent = weddingConfig.venue;
 
-    // --- 8. Fake Wishes Wall / RSVP Logic ---
     const sendWishBtn = document.getElementById("send-wish-btn");
     const wishesCard = document.getElementById("wishes-card");
     const thankYouMsg = document.getElementById("thank-you-msg");
@@ -184,24 +201,20 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Change button text briefly
         sendWishBtn.innerHTML = "Sending...";
         
         setTimeout(() => {
-            // Hide form, show thank you
             wishesCard.classList.add("hidden");
             thankYouMsg.classList.remove("hidden");
             
-            // Massive particle explosion from the center of the screen!
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
             
-            // Spawn a ton of hearts
             let count = 0;
             const burst = setInterval(() => {
                 spawnParticles(centerX, centerY, 5);
                 count++;
-                if(count > 10) clearInterval(burst); // Stop after a few bursts
+                if(count > 10) clearInterval(burst); 
             }, 100);
 
         }, 800);

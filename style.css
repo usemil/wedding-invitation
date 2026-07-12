@@ -1,93 +1,70 @@
 /* Reset and Base Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-    background-color: #1a1a1a; /* Dark border on desktop */
-    display: flex;
-    justify-content: center; 
-    font-family: 'Poppins', sans-serif;
-    color: #333;
-    overflow-x: hidden; /* Prevent horizontal scroll from flying hearts */
+    background-color: #1a1a1a; 
+    display: flex; justify-content: center; 
+    font-family: 'Poppins', sans-serif; color: #333;
+    overflow-x: hidden; 
+    -webkit-font-smoothing: antialiased; /* Fixes text glitches */
 }
 
 /* Premium Animated Background */
-@keyframes softGradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+@keyframes softGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
 #app-container {
-    width: 100%;
-    max-width: 430px; 
-    min-height: 100vh;
-    /* Soft blend of cream, blush pink, and warm white */
+    width: 100%; max-width: 430px; min-height: 100vh;
     background: linear-gradient(-45deg, #fffdf7, #fff0f5, #fdf5e6, #f9f6ef);
-    background-size: 400% 400%;
-    animation: softGradient 15s ease infinite;
-    box-shadow: 0 0 40px rgba(0,0,0,0.5); 
-    position: relative;
-    display: flex;
-    flex-direction: column;
+    background-size: 400% 400%; animation: softGradient 15s ease infinite;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5); position: relative;
+    display: flex; flex-direction: column; overflow: hidden; /* Prevents scrollbar jumps during transitions */
 }
 
 .hidden { display: none !important; }
 
 /* --- Splash Screen --- */
 #splash-screen {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background-color: #fffdf7;
-    z-index: 50; transition: opacity 0.8s ease-out;
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background-color: #fffdf7; z-index: 50; transition: opacity 0.8s ease-out; transform: translateZ(0);
 }
 .flower-bloom { font-size: 4rem; animation: bloom 2s ease-in-out infinite alternate; margin-bottom: 10px; }
 @keyframes bloom { 0% { transform: scale(0.8); opacity: 0.6; } 100% { transform: scale(1.2); opacity: 1; } }
 
 /* --- Envelope Screen --- */
 #envelope-screen {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    background-color: transparent; /* Lets the animated body background show */
-    z-index: 40; transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1), opacity 1s ease-in-out;
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background-color: transparent; z-index: 40; 
+    transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1), opacity 1s ease-in-out;
+    transform: translateZ(0); will-change: transform, opacity; /* Hardware acceleration */
 }
 
-/* Frosted Glass Envelope */
 .envelope-card {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     width: 85%; padding: 50px 20px; border-radius: 20px;
     box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(212, 175, 55, 0.4); text-align: center;
+    border: 1px solid rgba(212, 175, 55, 0.4); text-align: center; transform: translateZ(0);
 }
 .envelope-icon { font-size: 3rem; margin-bottom: 10px; animation: bounce 2s infinite ease-in-out; }
 @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
 .envelope-card h2 { font-family: 'Great Vibes', cursive; color: #333; font-size: 2.8rem; margin-bottom: 30px; }
 #open-btn {
-    background: linear-gradient(135deg, #d4af37, #b8860b);
-    color: #fff; border: none; padding: 14px 35px; font-family: 'Poppins', sans-serif;
-    font-size: 1.1rem; font-weight: 600; border-radius: 30px; cursor: pointer;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.5); transition: transform 0.2s, box-shadow 0.2s;
+    background: linear-gradient(135deg, #d4af37, #b8860b); color: #fff; border: none; padding: 14px 35px; 
+    font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; border-radius: 30px; cursor: pointer;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.5); transition: transform 0.2s; will-change: transform;
 }
-#open-btn:active { transform: scale(0.95); box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3); }
-.slide-up-away { transform: translateY(-100vh); opacity: 0; }
+#open-btn:active { transform: scale(0.95); }
+.slide-up-away { transform: translate3d(0, -100vh, 0); opacity: 0; }
 
 /* --- Prelude Screen (Our Story) --- */
 #prelude-screen {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center; text-align: center;
-    background-color: rgba(255, 253, 247, 0.95);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    z-index: 35; opacity: 0; transition: opacity 1.5s ease; padding: 30px;
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center;
+    background-color: rgba(255, 253, 247, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    z-index: 35; opacity: 0; transition: opacity 1.5s ease; padding: 30px; transform: translateZ(0);
 }
 .prelude-text {
     font-family: 'Great Vibes', cursive; font-size: 3rem; color: #d4af37;
-    line-height: 1.4; text-shadow: 0 2px 10px rgba(212, 175, 55, 0.2);
+    line-height: 1.4; text-shadow: 0 2px 10px rgba(212, 175, 55, 0.2); margin: 0;
 }
 
 /* --- Main Content & Details --- */
@@ -131,54 +108,24 @@ h1 { font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: #d4af37; tex
 .timeline-icon { font-size: 1.5rem; background: #ffffff; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); border: 2px solid #fff; z-index: 2; }
 .timeline-text h4 { font-size: 1.1rem; color: #333; font-weight: 600; }
 
-/* --- Multiple Floating Particles --- */
-.floating-particle {
-    position: fixed; pointer-events: none; z-index: 100;
-    animation: floatUp ease-out forwards;
-}
-@keyframes floatUp {
-    0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 0; }
-    20% { opacity: 1; }
-    100% { transform: translateY(-150px) scale(1.2) rotate(20deg); opacity: 0; }
-}
-/* --- New Sections: Glass Cards & Buttons --- */
+/* --- Glass Cards & Buttons --- */
 .glass-card {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    width: 100%; padding: 30px 20px; border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    text-align: center; margin-bottom: 30px;
+    background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    width: 100%; padding: 30px 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    border: 1px solid rgba(255, 255, 255, 0.9); text-align: center; margin-bottom: 30px;
 }
 .glass-card h3 { font-family: 'Great Vibes', cursive; font-size: 2.2rem; color: #d4af37; margin-bottom: 15px; }
-
 .primary-btn {
-    display: inline-block; background: linear-gradient(135deg, #d4af37, #b8860b);
-    color: #fff; border: none; padding: 12px 25px; font-family: 'Poppins', sans-serif;
-    font-size: 1rem; font-weight: 600; border-radius: 30px; cursor: pointer;
-    text-decoration: none; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-    transition: transform 0.2s, box-shadow 0.2s; margin-top: 15px; width: 100%;
+    display: inline-block; background: linear-gradient(135deg, #d4af37, #b8860b); color: #fff; border: none; padding: 12px 25px; 
+    font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; border-radius: 30px; cursor: pointer;
+    text-decoration: none; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4); transition: transform 0.2s; width: 100%;
 }
 .primary-btn:active { transform: scale(0.95); }
 
-/* --- Dress Code --- */
-.dress-code-section { width: 100%; text-align: center; margin-bottom: 40px; }
-.dress-code-section h3 { font-family: 'Great Vibes', cursive; font-size: 2.5rem; color: #d4af37; margin-bottom: 20px; }
-.dress-grid { display: flex; justify-content: space-around; gap: 15px; }
-.dress-item {
-    background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(8px);
-    flex: 1; padding: 20px 10px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.9);
-}
-.dress-item .icon { font-size: 2rem; display: block; margin-bottom: 10px; }
-.dress-item h4 { color: #333; font-weight: 600; font-size: 1.1rem; }
-.dress-item p { color: #777; font-size: 0.9rem; }
-
-/* --- Wishes Wall Inputs --- */
+/* --- Wishes Wall --- */
 .input-field {
-    width: 100%; padding: 12px 15px; margin-bottom: 15px;
-    border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.3);
-    background: rgba(255, 255, 255, 0.8); font-family: 'Poppins', sans-serif;
-    font-size: 0.9rem; outline: none; transition: border 0.3s;
+    width: 100%; padding: 12px 15px; margin-bottom: 15px; border-radius: 10px; border: 1px solid rgba(212, 175, 55, 0.3);
+    background: rgba(255, 255, 255, 0.8); font-family: 'Poppins', sans-serif; font-size: 0.9rem; outline: none; transition: border 0.3s;
 }
 .input-field:focus { border-color: #d4af37; }
 #thank-you-msg { text-align: center; padding: 30px 10px; }
@@ -191,11 +138,30 @@ h1 { font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: #d4af37; tex
 
 /* --- Music Button --- */
 #music-btn {
-    position: fixed; top: 20px; right: 20px; z-index: 100;
-    width: 45px; height: 45px; border-radius: 50%;
-    background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(5px);
-    border: 1px solid #d4af37; font-size: 1.2rem; cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;
+    position: fixed; top: 20px; right: 20px; z-index: 100; width: 45px; height: 45px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(5px); border: 1px solid #d4af37; font-size: 1.2rem; 
+    cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center;
 }
 .playing { animation: spin 4s linear infinite; }
 @keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* --- Particles & Background Sakura --- */
+.floating-particle {
+    position: fixed; pointer-events: none; z-index: 100; animation: floatUp ease-out forwards; will-change: transform, opacity;
+}
+@keyframes floatUp {
+    0% { transform: translate3d(0,0,0) scale(0.5) rotate(0deg); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translate3d(0, -150px, 0) scale(1.2) rotate(20deg); opacity: 0; }
+}
+
+.sakura-petal {
+    position: fixed; top: -10vh; font-size: 1.2rem; pointer-events: none; z-index: 5;
+    animation: fall linear infinite; opacity: 0.7; will-change: transform;
+}
+@keyframes fall {
+    0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.8; }
+    80% { opacity: 0.8; }
+    100% { transform: translate3d(var(--drift), 110vh, 0) rotate(360deg); opacity: 0; }
+}
