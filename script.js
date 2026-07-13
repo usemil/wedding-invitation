@@ -23,16 +23,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const bgMusic = document.getElementById("bg-music");
     const musicBtn = document.getElementById("music-btn");
 
+    // Preload heavy assets silently
     bgMusic.src = weddingConfig.musicSrc;
-// Force the browser to silently load these heavy assets during the Splash Screen
     bgMusic.load();
     ringVideo.load();
+
     // Splash Screen fade out
     setTimeout(() => {
         splashScreen.style.opacity = "0";
         setTimeout(() => {
             splashScreen.classList.add("hidden");
             envelopeScreen.classList.remove("hidden");
+            
+            // NEW: Smoothly fade in the envelope screen!
+            setTimeout(() => {
+                envelopeScreen.style.opacity = "1";
+            }, 50);
+
         }, 800); 
     }, 2000); 
 
@@ -57,28 +64,27 @@ document.addEventListener("DOMContentLoaded", () => {
                     setTimeout(() => {
                         preludeScreen.classList.add("hidden");
                         
-                        // Show Ring Video Screen
+                        // Prep the Ring Video Screen
                         ringScreen.classList.remove("hidden");
-                        
-                        // Rewind video to the start and play it!
-                        ringVideo.currentTime = 0;
-                        ringVideo.play();
+                        ringVideo.currentTime = 0; // Rewind to start
                         
                         setTimeout(() => {
-                            ringScreen.style.opacity = "1";
+                            // FIX: Fade in and press play at the EXACT same time! 
+                            // This removes the frozen frame and looks perfectly natural.
+                            ringScreen.style.opacity = "1"; 
+                            ringVideo.play();
                             
                             // Trigger the continuous magical burst halfway through (3.5 seconds)
                             setTimeout(() => {
                                 let burstCount = 0;
                                 const ringBurst = setInterval(() => {
-                                    // Using the exact same spread and count as the Wishes Wall!
                                     spawnParticles(window.innerWidth / 2, window.innerHeight / 2, 6, 300, 300);
                                     burstCount++;
                                     if(burstCount > 12) clearInterval(ringBurst); 
                                 }, 100);
                             }, 3500);
 
-                            // The GIF fades out at exactly 7 seconds (7000ms)
+                            // The video fades out at exactly 7 seconds
                             setTimeout(() => {
                                 ringScreen.style.opacity = "0";
                                 
@@ -102,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 50);
         }, 1000); 
     });
-
     // 3. Music Pause/Play Toggle
     let isPlaying = true;
     musicBtn.addEventListener("click", () => {
@@ -149,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.1 });
     document.querySelectorAll('.hidden-scroll').forEach((el) => observer.observe(el));
 
-    // 6. Upgraded Particle System (Custom spreads)
+    // 6. Particle System (Custom spreads)
     const symbols = ['❤️', '🌸', '✨', '💖'];
 
     function spawnParticles(x, y, amount, spreadX = 80, spreadY = 40) {
