@@ -10,13 +10,11 @@
 <body>
     <div id="app-container">
         
-        <!-- Stage 1: Splash Screen -->
         <div id="splash-screen">
             <div class="flower-bloom">🌸</div>
             <p>Loading...</p>
         </div>
 
-        <!-- Stage 2: Locked Envelope -->
         <div id="envelope-screen" class="hidden">
             <div class="envelope-card">
                 <div class="envelope-icon">✉️</div>
@@ -25,7 +23,6 @@
             </div>
         </div>
 
-        <!-- Stage 2.5: The Prelude -->
         <div id="prelude-screen" class="hidden">
             <h2 class="prelude-text">
                 Two souls, one heart.<br>
@@ -34,7 +31,9 @@
             </h2>
         </div>
 
-        <!-- Stage 3: Main Invitation Content -->
+       <div id="ring-screen" class="hidden">
+            <img id="ring-video" src="assets/video/ring.gif" alt="Ring Ceremony">
+        </div>
         <div id="main-content" class="hidden">
             
             <p class="subtitle">TOGETHER WITH THEIR FAMILIES</p>
@@ -81,7 +80,6 @@
                 </div>
             </div>
 
-            <!-- Location / Map -->
             <div class="location-section hidden-scroll">
                 <div class="glass-card">
                     <h3>Venue</h3>
@@ -90,7 +88,6 @@
                 </div>
             </div>
 
-            <!-- Wishes Wall / Fake RSVP -->
             <div class="wishes-section hidden-scroll">
                 <div class="glass-card" id="wishes-card">
                     <h3>Send Your Wishes</h3>
@@ -104,14 +101,12 @@
                 </div>
             </div>
 
-            <!-- Footer -->
             <footer class="footer">
                 <p>We can't wait to celebrate with you</p>
                 <h2 class="footer-names">Bint-e-Mubashar & M. Mubeen</h2>
             </footer>
         </div>
         
-        <!-- Music Button -->
         <button id="music-btn" class="hidden">🎵</button>
         <audio id="bg-music" loop preload="auto"></audio>
     </div>

@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const splashScreen = document.getElementById("splash-screen");
     const envelopeScreen = document.getElementById("envelope-screen");
     const preludeScreen = document.getElementById("prelude-screen");
+    const ringScreen = document.getElementById("ring-screen");
+    const ringVideo = document.getElementById("ring-video"); 
     const mainContent = document.getElementById("main-content");
     const openBtn = document.getElementById("open-btn");
     const bgMusic = document.getElementById("bg-music");
@@ -32,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 800); 
     }, 2000); 
 
-    // Open Envelope
+    // The Master Sequence
     openBtn.addEventListener("click", () => {
         bgMusic.play().catch(e => console.log("Audio play prevented:", e));
         musicBtn.classList.remove("hidden");
@@ -46,24 +48,55 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 preludeScreen.style.opacity = "1";
                 
+                // Keep Prelude on screen for 3 seconds
                 setTimeout(() => {
                     preludeScreen.style.opacity = "0";
                     
                     setTimeout(() => {
                         preludeScreen.classList.add("hidden");
-                        mainContent.classList.remove("hidden");
                         
-                        // FIX: Only allow vertical scrolling, strictly lock horizontal!
-                        appContainer.style.overflowY = "auto";
-                        appContainer.style.overflowX = "hidden";
+                        // Force the GIF to restart from frame 0
+                        ringVideo.src = "";
+                        ringVideo.src = "assets/video/ring.gif";
+                        
+                        // Show Ring Video Screen
+                        ringScreen.classList.remove("hidden");
                         
                         setTimeout(() => {
-                            mainContent.classList.add("fade-in-content");
-                        }, 50);
+                            ringScreen.style.opacity = "1";
+                            
+                            // Trigger the continuous magical burst halfway through (3.5 seconds)
+                            setTimeout(() => {
+                                let burstCount = 0;
+                                const ringBurst = setInterval(() => {
+                                    // Using the exact same spread and count as the Wishes Wall!
+                                    spawnParticles(window.innerWidth / 2, window.innerHeight / 2, 6, 300, 300);
+                                    burstCount++;
+                                    if(burstCount > 12) clearInterval(ringBurst); 
+                                }, 100);
+                            }, 3500);
 
+                            // The GIF fades out at exactly 7 seconds (7000ms)
+                            setTimeout(() => {
+                                ringScreen.style.opacity = "0";
+                                
+                                setTimeout(() => {
+                                    ringScreen.classList.add("hidden");
+                                    mainContent.classList.remove("hidden");
+                                    
+                                    appContainer.style.overflowY = "auto";
+                                    appContainer.style.overflowX = "hidden";
+                                    
+                                    setTimeout(() => {
+                                        mainContent.classList.add("fade-in-content");
+                                    }, 50);
+
+                                }, 1000); // Wait for fade out
+                            }, 7000); 
+                            
+                        }, 50);
                     }, 1500); 
                 }, 3000); 
-                
             }, 50);
         }, 1000); 
     });
@@ -114,17 +147,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { threshold: 0.1 });
     document.querySelectorAll('.hidden-scroll').forEach((el) => observer.observe(el));
 
-    // 6. Particle System (Click & Slide Trail)
+    // 6. Upgraded Particle System (Custom spreads)
     const symbols = ['❤️', '🌸', '✨', '💖'];
 
-    function spawnParticles(x, y, amount) {
+    function spawnParticles(x, y, amount, spreadX = 80, spreadY = 40) {
         for (let i = 0; i < amount; i++) {
             const particle = document.createElement('div');
             particle.classList.add('floating-particle');
             particle.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
             
-            const randomX = (Math.random() - 0.5) * 80; 
-            const randomY = (Math.random() - 0.5) * 40;
+            const randomX = (Math.random() - 0.5) * spreadX; 
+            const randomY = (Math.random() - 0.5) * spreadY;
             
             particle.style.left = `${x + randomX}px`;
             particle.style.top = `${y + randomY}px`;
@@ -138,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.body.addEventListener('click', (e) => {
-        if(e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
+        if(e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
         spawnParticles(e.clientX, e.clientY, Math.floor(Math.random() * 3) + 2);
     });
 
@@ -168,8 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
         petal.innerHTML = '🌸';
         
         const containerWidth = appContainer.clientWidth;
-        
-        // FIX: Subtract 40px so petals never spawn perfectly on the right edge
         petal.style.left = (Math.random() * (containerWidth - 40)) + 'px';
         
         const containerHeight = Math.max(appContainer.scrollHeight, window.innerHeight);
@@ -220,7 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
             
             let count = 0;
             const burst = setInterval(() => {
-                spawnParticles(centerX, centerY, 6);
+                spawnParticles(centerX, centerY, 6, 300, 300);
                 count++;
                 if(count > 12) clearInterval(burst); 
             }, 100);

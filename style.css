@@ -74,11 +74,29 @@ body {
 .primary-btn { width: 100%; display: inline-block; margin-top: 15px; }
 
 .slide-up-away { transform: translate3d(0, -100vh, 0); opacity: 0; }
+/* --- Ring GIF Screen --- */
+#ring-screen {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background-color: transparent; /* Made transparent so the background Sakura petals show through! */
+    z-index: 30; opacity: 0; transition: opacity 1s ease; transform: translateZ(0);
+}
 
+#ring-video {
+    width: 110%; /* Stretched slightly to push the edges closer to the screen border */
+    max-width: 450px; 
+    pointer-events: none; 
+    filter: contrast(1.05) brightness(1.0); 
+    
+    /* THE MAGIC TRICK: This fades the harsh rectangular edges of the GIF into transparency! */
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 50%, transparent 100%);
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 50%, transparent 100%);
+}
+/* --- Prelude Screen --- */
 /* --- Prelude Screen --- */
 #prelude-screen {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center;
-    background-color: rgba(255, 244, 247, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    background-color: transparent; /* Made completely transparent */
+    /* Removed the blur so you can see the Sakura petals perfectly */
     z-index: 35; opacity: 0; transition: opacity 1.5s ease; padding: 40px; transform: translateZ(0);
 }
 .prelude-text {
