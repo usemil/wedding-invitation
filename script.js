@@ -8,7 +8,14 @@ document.addEventListener("DOMContentLoaded", () => {
     venueDisplay.textContent = weddingConfig.venue;
 
     const weddingDateObj = new Date(weddingConfig.weddingDate);
-    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    const dateOptions = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    };
     dateDisplay.textContent = weddingDateObj.toLocaleDateString('en-US', dateOptions);
 
     // 2. Flow Transitions & Music
@@ -17,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const envelopeScreen = document.getElementById("envelope-screen");
     const preludeScreen = document.getElementById("prelude-screen");
     const ringScreen = document.getElementById("ring-screen");
-    const ringVideo = document.getElementById("ring-video"); 
+    const ringVideo = document.getElementById("ring-video");
     const mainContent = document.getElementById("main-content");
     const openBtn = document.getElementById("open-btn");
     const bgMusic = document.getElementById("bg-music");
@@ -34,14 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
             splashScreen.classList.add("hidden");
             envelopeScreen.classList.remove("hidden");
-            
+
             // NEW: Smoothly fade in the envelope screen!
             setTimeout(() => {
                 envelopeScreen.style.opacity = "1";
             }, 50);
 
-        }, 800); 
-    }, 2000); 
+        }, 800);
+    }, 2000);
 
     // The Master Sequence
     openBtn.addEventListener("click", () => {
@@ -49,75 +56,61 @@ document.addEventListener("DOMContentLoaded", () => {
         musicBtn.classList.remove("hidden");
 
         envelopeScreen.classList.add("slide-up-away");
-        
+
         setTimeout(() => {
             envelopeScreen.classList.add("hidden");
             preludeScreen.classList.remove("hidden");
-            
+
             setTimeout(() => {
                 preludeScreen.style.opacity = "1";
-                
+
                 // Keep Prelude on screen for 3 seconds
                 setTimeout(() => {
                     preludeScreen.style.opacity = "0";
-                    
+
                     setTimeout(() => {
                         preludeScreen.classList.add("hidden");
-                        
+
                         // Prep the Ring Video Screen
-                       ringVideo.currentTime = 0;
+                        ringVideo.currentTime = 0; // Rewind to start
 
-// Wait until the browser is ready to display the first frame
-const showRingVideo = () => {
-    ringVideo.removeEventListener("canplay", showRingVideo);
+                        // FIX: Fade in and press play INSTANTLY. No hidden class removal, no timeouts!
+                        ringScreen.style.opacity = "1";
+                        ringVideo.play();
 
-    ringScreen.style.opacity = "1";
-
-    ringVideo.play().catch(console.error);
-};
-
-ringVideo.addEventListener("canplay", showRingVideo);
-
-// If already ready, don't wait
-if (ringVideo.readyState >= 3) {
-    showRingVideo();
-}
-                        
                         // Trigger the continuous magical burst halfway through (3.5 seconds)
                         setTimeout(() => {
                             let burstCount = 0;
                             const ringBurst = setInterval(() => {
                                 spawnParticles(window.innerWidth / 2, window.innerHeight / 2, 6, 300, 300);
                                 burstCount++;
-                                if(burstCount > 12) clearInterval(ringBurst); 
+                                if (burstCount > 12) clearInterval(ringBurst);
                             }, 100);
                         }, 3500);
 
                         // The video fades out at exactly 7 seconds
                         setTimeout(() => {
                             ringScreen.style.opacity = "0";
-                            
+
                             setTimeout(() => {
                                 mainContent.classList.remove("hidden");
 
-appContainer.style.overflowY = "auto";
-appContainer.style.overflowX = "hidden";
+                                appContainer.style.overflowY = "auto";
+                                appContainer.style.overflowX = "hidden";
 
-requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-        mainContent.classList.add("fade-in-content");
-        startSakura();
-    });
-});
+                                setTimeout(() => {
+                                    mainContent.classList.add("fade-in-content");
+                                }, 50);
 
                             }, 1000); // Wait for fade out
-                        }, 7000); 
-                            
-                    }, 1500); 
-                }, 3000); 
+                        }, 7000);
+
+                    }, 1500);
+                }, 3000);
             }, 50);
-        }, 1000); 
+        }, 1000);
     });
+
     // 3. Music Pause/Play Toggle
     let isPlaying = true;
     musicBtn.addEventListener("click", () => {
@@ -151,8 +144,9 @@ requestAnimationFrame(() => {
         document.getElementById("minutes").textContent = minutes < 10 ? "0" + minutes : minutes;
         document.getElementById("seconds").textContent = seconds < 10 ? "0" + seconds : seconds;
     }
+    
     setInterval(updateCountdown, 1000);
-    updateCountdown(); 
+    updateCountdown();
 
     // 5. Scroll Reveal
     const observer = new IntersectionObserver((entries) => {
@@ -162,6 +156,7 @@ requestAnimationFrame(() => {
             }
         });
     }, { threshold: 0.1 });
+    
     document.querySelectorAll('.hidden-scroll').forEach((el) => observer.observe(el));
 
     // 6. Particle System (Custom spreads)
@@ -172,38 +167,41 @@ requestAnimationFrame(() => {
             const particle = document.createElement('div');
             particle.classList.add('floating-particle');
             particle.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-            
-            const randomX = (Math.random() - 0.5) * spreadX; 
+
+            const randomX = (Math.random() - 0.5) * spreadX;
             const randomY = (Math.random() - 0.5) * spreadY;
-            
+
             particle.style.left = `${x + randomX}px`;
             particle.style.top = `${y + randomY}px`;
-            
+
             particle.style.fontSize = `${Math.random() * 1 + 1}rem`;
             particle.style.animationDuration = `${Math.random() * 1 + 1.5}s`;
-            
+
             document.body.appendChild(particle);
             setTimeout(() => particle.remove(), 2500);
         }
     }
 
     document.body.addEventListener('click', (e) => {
-        if(e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        const ignoredTags = ['BUTTON', 'A', 'INPUT', 'TEXTAREA'];
+        if (ignoredTags.includes(e.target.tagName)) return;
+        
         spawnParticles(e.clientX, e.clientY, Math.floor(Math.random() * 3) + 2);
     });
 
     let lastSpawnTime = 0;
+    
     document.body.addEventListener('touchmove', (e) => {
         const now = Date.now();
         if (now - lastSpawnTime > 100) {
-            const touch = e.touches[0]; 
+            const touch = e.touches[0];
             spawnParticles(touch.clientX, touch.clientY, 1);
             lastSpawnTime = now;
         }
-    }, { passive: true }); 
+    }, { passive: true });
 
     document.body.addEventListener('mousemove', (e) => {
-        if (e.buttons !== 1) return; 
+        if (e.buttons !== 1) return;
         const now = Date.now();
         if (now - lastSpawnTime > 100) {
             spawnParticles(e.clientX, e.clientY, 1);
@@ -211,40 +209,34 @@ requestAnimationFrame(() => {
         }
     });
 
-    // 7. Dense Sakura Spawning 
+    // 7. Dense Sakura Spawning
     function createSakura() {
         const petal = document.createElement('div');
         petal.classList.add('sakura-petal');
         petal.innerHTML = '🌸';
-        
+
         const containerWidth = appContainer.clientWidth;
         petal.style.left = (Math.random() * (containerWidth - 40)) + 'px';
-        
+
         const containerHeight = Math.max(appContainer.scrollHeight, window.innerHeight);
         petal.style.top = (Math.random() * containerHeight) + 'px';
-        
-        petal.style.fontSize = Math.random() * 0.8 + 1 + 'rem';
-        
+
+        petal.style.fontSize = (Math.random() * 0.8 + 1) + 'rem';
+
         const duration = Math.random() * 2 + 3;
-        petal.style.animationDuration = duration + 's'; 
-        
+        petal.style.animationDuration = duration + 's';
+
         appContainer.appendChild(petal);
-        
+
         setTimeout(() => {
             petal.remove();
         }, duration * 1000);
     }
-    
-    let sakuraInterval;
 
-function startSakura() {
-    if (sakuraInterval) return;
-
-    sakuraInterval = setInterval(() => {
+    setInterval(() => {
         createSakura();
         createSakura();
-    }, 500);
-}
+    }, 300);
 
     // 8. Venue & Fake RSVP Logic
     const mapBtn = document.getElementById("map-btn");
@@ -264,22 +256,21 @@ function startSakura() {
         }
 
         sendWishBtn.innerHTML = "Sending...";
-        
+
         setTimeout(() => {
             wishesCard.classList.add("hidden");
             thankYouMsg.classList.remove("hidden");
-            
+
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
-            
+
             let count = 0;
             const burst = setInterval(() => {
                 spawnParticles(centerX, centerY, 6, 300, 300);
                 count++;
-                if(count > 12) clearInterval(burst); 
+                if (count > 12) clearInterval(burst);
             }, 100);
 
         }, 800);
     });
-    
 });
