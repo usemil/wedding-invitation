@@ -24,7 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const musicBtn = document.getElementById("music-btn");
 
     bgMusic.src = weddingConfig.musicSrc;
-
+// Force the browser to silently load these heavy assets during the Splash Screen
+    bgMusic.load();
+    ringVideo.load();
     // Splash Screen fade out
     setTimeout(() => {
         splashScreen.style.opacity = "0";
