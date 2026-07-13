@@ -83,20 +83,28 @@ body {
 
 .slide-up-away { transform: translate3d(0, -100vh, 0); opacity: 0; }
 /* --- Ring GIF Screen --- */
+/* --- Ring Video Screen --- */
 #ring-screen {
-    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    background-color: transparent; /* Made transparent so the background Sakura petals show through! */
-    z-index: 30; opacity: 0; transition: opacity 1s ease; transform: translateZ(0);
+    /* FIX: Switched from Flexbox to Absolute positioning to freeze layout physics */
+    position: absolute; 
+    inset: 0; 
+    width: 100%;
+    height: 100%;
+    background-color: transparent; 
+    z-index: 30; 
+    opacity: 0; 
+    transition: opacity 1s ease; 
+    transform: translateZ(0);
 }
 
 #ring-video {
-    /* FIX: Lock video perfectly to the center, completely bypassing layout glitches! */
+    /* Lock video perfectly to the dead-center of the screen layout */
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) translateZ(0);
     
-    /* Hardware acceleration to prevent first-frame flashing */
+    /* Hardware acceleration to force the GPU to pre-render the frame */
     will-change: transform, opacity;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
