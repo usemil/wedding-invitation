@@ -82,14 +82,19 @@ body {
 }
 
 #ring-video {
-    width: 110%; /* Stretched slightly to push the edges closer to the screen border */
+    width: 110%; 
     max-width: 450px; 
     pointer-events: none; 
-    filter: contrast(1.05) brightness(1.0); 
     
-    /* THE MAGIC TRICK: This fades the harsh rectangular edges of the GIF into transparency! */
-    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 50%, transparent 100%);
-    mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 50%, transparent 100%);
+    /* FIX 1: Boost contrast and brightness to force the off-white background into PURE WHITE */
+    filter: contrast(1.2) brightness(1.1); 
+    
+    /* Now that the background is pure white, multiply will make it 100% invisible */
+    mix-blend-mode: multiply;
+    
+    /* FIX 2: A much more aggressive feathered mask to guarantee the sharp corners are erased */
+    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, black 40%, transparent 85%);
+    mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, black 40%, transparent 85%);
 }
 /* --- Prelude Screen --- */
 /* --- Prelude Screen --- */

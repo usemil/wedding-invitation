@@ -55,12 +55,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     setTimeout(() => {
                         preludeScreen.classList.add("hidden");
                         
-                        // Force the GIF to restart from frame 0
-                        ringVideo.src = "";
-                        ringVideo.src = "assets/video/ring.gif";
-                        
                         // Show Ring Video Screen
                         ringScreen.classList.remove("hidden");
+                        
+                        // Rewind video to the start and play it!
+                        ringVideo.currentTime = 0;
+                        ringVideo.play();
                         
                         setTimeout(() => {
                             ringScreen.style.opacity = "1";
