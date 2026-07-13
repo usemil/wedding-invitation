@@ -84,28 +84,34 @@ body {
 .slide-up-away { transform: translate3d(0, -100vh, 0); opacity: 0; }
 /* --- Ring GIF Screen --- */
 /* --- Ring Video Screen --- */
+/* --- Ring Video Screen --- */
 #ring-screen {
-    /* FIX: Switched from Flexbox to Absolute positioning to freeze layout physics */
     position: absolute; 
     inset: 0; 
     width: 100%;
     height: 100%;
     background-color: transparent; 
     z-index: 30; 
+    
+    /* Kept permanently in the layout, but completely invisible and un-clickable */
     opacity: 0; 
+    pointer-events: none; 
+    
     transition: opacity 1s ease; 
     transform: translateZ(0);
 }
 
 #ring-video {
-    /* Lock video perfectly to the dead-center of the screen layout */
+    /* The Bulletproof Centering Trick (Zero math required by the browser!) */
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) translateZ(0);
+    top: 0; 
+    bottom: 0; 
+    left: 0; 
+    right: 0;
+    margin: auto;
     
-    /* Hardware acceleration to force the GPU to pre-render the frame */
-    will-change: transform, opacity;
+    /* Hardware acceleration */
+    will-change: opacity;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 

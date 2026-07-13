@@ -65,44 +65,39 @@ document.addEventListener("DOMContentLoaded", () => {
                         preludeScreen.classList.add("hidden");
                         
                         // Prep the Ring Video Screen
-                        ringScreen.classList.remove("hidden");
                         ringVideo.currentTime = 0; // Rewind to start
                         
+                        // FIX: Fade in and press play INSTANTLY. No hidden class removal, no timeouts!
+                        ringScreen.style.opacity = "1"; 
+                        ringVideo.play();
+                        
+                        // Trigger the continuous magical burst halfway through (3.5 seconds)
                         setTimeout(() => {
-                            // FIX: Fade in and press play at the EXACT same time! 
-                            // This removes the frozen frame and looks perfectly natural.
-                            ringScreen.style.opacity = "1"; 
-                            ringVideo.play();
-                            
-                            // Trigger the continuous magical burst halfway through (3.5 seconds)
-                            setTimeout(() => {
-                                let burstCount = 0;
-                                const ringBurst = setInterval(() => {
-                                    spawnParticles(window.innerWidth / 2, window.innerHeight / 2, 6, 300, 300);
-                                    burstCount++;
-                                    if(burstCount > 12) clearInterval(ringBurst); 
-                                }, 100);
-                            }, 3500);
+                            let burstCount = 0;
+                            const ringBurst = setInterval(() => {
+                                spawnParticles(window.innerWidth / 2, window.innerHeight / 2, 6, 300, 300);
+                                burstCount++;
+                                if(burstCount > 12) clearInterval(ringBurst); 
+                            }, 100);
+                        }, 3500);
 
-                            // The video fades out at exactly 7 seconds
+                        // The video fades out at exactly 7 seconds
+                        setTimeout(() => {
+                            ringScreen.style.opacity = "0";
+                            
                             setTimeout(() => {
-                                ringScreen.style.opacity = "0";
+                                mainContent.classList.remove("hidden");
+                                
+                                appContainer.style.overflowY = "auto";
+                                appContainer.style.overflowX = "hidden";
                                 
                                 setTimeout(() => {
-                                    ringScreen.classList.add("hidden");
-                                    mainContent.classList.remove("hidden");
-                                    
-                                    appContainer.style.overflowY = "auto";
-                                    appContainer.style.overflowX = "hidden";
-                                    
-                                    setTimeout(() => {
-                                        mainContent.classList.add("fade-in-content");
-                                    }, 50);
+                                    mainContent.classList.add("fade-in-content");
+                                }, 50);
 
-                                }, 1000); // Wait for fade out
-                            }, 7000); 
+                            }, 1000); // Wait for fade out
+                        }, 7000); 
                             
-                        }, 100);
                     }, 1500); 
                 }, 3000); 
             }, 50);
