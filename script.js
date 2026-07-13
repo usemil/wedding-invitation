@@ -99,13 +99,16 @@ if (ringVideo.readyState >= 3) {
                             
                             setTimeout(() => {
                                 mainContent.classList.remove("hidden");
-                                
-                                appContainer.style.overflowY = "auto";
-                                appContainer.style.overflowX = "hidden";
-                                
-                                setTimeout(() => {
-                                    mainContent.classList.add("fade-in-content");
-                                }, 50);
+
+appContainer.style.overflowY = "auto";
+appContainer.style.overflowX = "hidden";
+
+requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+        mainContent.classList.add("fade-in-content");
+        startSakura();
+    });
+});
 
                             }, 1000); // Wait for fade out
                         }, 7000); 
@@ -232,10 +235,16 @@ if (ringVideo.readyState >= 3) {
         }, duration * 1000);
     }
     
-    setInterval(() => {
+    let sakuraInterval;
+
+function startSakura() {
+    if (sakuraInterval) return;
+
+    sakuraInterval = setInterval(() => {
         createSakura();
-        createSakura(); 
-    }, 300);
+        createSakura();
+    }, 500);
+}
 
     // 8. Venue & Fake RSVP Logic
     const mapBtn = document.getElementById("map-btn");
