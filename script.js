@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 }, 1000); // Wait for fade out
                             }, 7000); 
                             
-                        }, 50);
+                        }, 100);
                     }, 1500); 
                 }, 3000); 
             }, 50);

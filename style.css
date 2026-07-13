@@ -90,17 +90,24 @@ body {
 }
 
 #ring-video {
+    /* FIX: Lock video perfectly to the center, completely bypassing layout glitches! */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* Hardware acceleration to prevent first-frame flashing */
+    will-change: transform, opacity;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
     width: 110%; 
     max-width: 450px; 
     pointer-events: none; 
     
-    /* FIX 1: Boost contrast and brightness to force the off-white background into PURE WHITE */
     filter: contrast(1.2) brightness(1.1); 
-    
-    /* Now that the background is pure white, multiply will make it 100% invisible */
     mix-blend-mode: multiply;
     
-    /* FIX 2: A much more aggressive feathered mask to guarantee the sharp corners are erased */
     -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, black 40%, transparent 85%);
     mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, black 40%, transparent 85%);
 }
