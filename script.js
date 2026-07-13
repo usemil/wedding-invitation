@@ -71,40 +71,30 @@ document.addEventListener("DOMContentLoaded", () => {
                     setTimeout(() => {
                         preludeScreen.classList.add("hidden");
 
-                        // Prep the Ring Video Screen
+                       // Prep the Video Screen
                         ringVideo.currentTime = 0; // Rewind to start
-
-                        // FIX: Fade in and press play INSTANTLY. No hidden class removal, no timeouts!
-                        ringScreen.style.opacity = "1";
+                        
+                        // Fade in and press play INSTANTLY
+                        ringScreen.style.opacity = "1"; 
                         ringVideo.play();
-
-                        // Trigger the continuous magical burst halfway through (3.5 seconds)
-                        setTimeout(() => {
-                            let burstCount = 0;
-                            const ringBurst = setInterval(() => {
-                                spawnParticles(window.innerWidth / 2, window.innerHeight / 2, 6, 300, 300);
-                                burstCount++;
-                                if (burstCount > 12) clearInterval(ringBurst);
-                            }, 100);
-                        }, 3500);
-
-                        // The video fades out at exactly 7 seconds
+                        
+                        
+                        // The new video is 5 seconds long. Fade it out at exactly 5000ms!
                         setTimeout(() => {
                             ringScreen.style.opacity = "0";
-
+                            
                             setTimeout(() => {
                                 mainContent.classList.remove("hidden");
-
+                                
                                 appContainer.style.overflowY = "auto";
                                 appContainer.style.overflowX = "hidden";
-
+                                
                                 setTimeout(() => {
                                     mainContent.classList.add("fade-in-content");
                                 }, 50);
 
                             }, 1000); // Wait for fade out
-                        }, 7000);
-
+                        }, 5000);
                     }, 1500);
                 }, 3000);
             }, 50);
