@@ -65,11 +65,23 @@ document.addEventListener("DOMContentLoaded", () => {
                         preludeScreen.classList.add("hidden");
                         
                         // Prep the Ring Video Screen
-                        ringVideo.currentTime = 0; // Rewind to start
-                        
-                        // FIX: Fade in and press play INSTANTLY. No hidden class removal, no timeouts!
-                        ringScreen.style.opacity = "1"; 
-                        ringVideo.play();
+                       ringVideo.currentTime = 0;
+
+// Wait until the browser is ready to display the first frame
+const showRingVideo = () => {
+    ringVideo.removeEventListener("canplay", showRingVideo);
+
+    ringScreen.style.opacity = "1";
+
+    ringVideo.play().catch(console.error);
+};
+
+ringVideo.addEventListener("canplay", showRingVideo);
+
+// If already ready, don't wait
+if (ringVideo.readyState >= 3) {
+    showRingVideo();
+}
                         
                         // Trigger the continuous magical burst halfway through (3.5 seconds)
                         setTimeout(() => {

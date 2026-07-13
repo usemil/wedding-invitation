@@ -102,28 +102,37 @@ body {
 }
 
 #ring-video {
-    /* The Bulletproof Centering Trick (Zero math required by the browser!) */
     position: absolute;
-    top: 0; 
-    bottom: 0; 
-    left: 0; 
-    right: 0;
-    margin: auto;
-    
-    /* Hardware acceleration */
-    will-change: opacity;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 110%;
+    max-width: 450px;
+    height: auto;
+
+    pointer-events: none;
+
+    filter: contrast(1.2) brightness(1.1);
+    mix-blend-mode: multiply;
+
+    opacity: 1;
+
+    will-change: transform, opacity;
+
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 
-    width: 110%; 
-    max-width: 450px; 
-    pointer-events: none; 
-    
-    filter: contrast(1.2) brightness(1.1); 
-    mix-blend-mode: multiply;
-    
-    -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, black 40%, transparent 85%);
-    mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, black 40%, transparent 85%);
+    -webkit-mask-image: radial-gradient(
+        ellipse 75% 65% at 50% 50%,
+        black 40%,
+        transparent 85%
+    );
+    mask-image: radial-gradient(
+        ellipse 75% 65% at 50% 50%,
+        black 40%,
+        transparent 85%
+    );
 }
 /* --- Prelude Screen --- */
 /* --- Prelude Screen --- */
